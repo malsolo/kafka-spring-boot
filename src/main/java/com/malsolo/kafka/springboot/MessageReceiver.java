@@ -1,7 +1,5 @@
 package com.malsolo.kafka.springboot;
 
-import static com.malsolo.kafka.springboot.KafkaSpringBootApplication.TOPIC;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MessageReceiver {
 
-    @KafkaListener(topics = TOPIC)
+    @KafkaListener(id = "MessageReceiver",
+        autoStartup = "${kafka.consumer.auto-start}",
+        topics = "${kafka.topic}",
+        groupId = "${kafka.consumer.group-id}",
+        clientIdPrefix = "MessageReceiver-Prefix"
+    )
     public void processMessage(String content) {
         log.info("Message received: {}", content);
     }
